@@ -18,6 +18,7 @@ public class MainFragment extends Fragment {
 
 
     private ImageButton searchButton;
+    private ImageButton newButton;
 
     private OnFragmentInteractionListener mListener;
 
@@ -47,8 +48,9 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         searchButton = view.findViewById(R.id.searchButton);
+        newButton = view.findViewById(R.id.newButton);
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -58,7 +60,19 @@ public class MainFragment extends Fragment {
                 ft.replace(R.id.fragment_container, searchFragment);
                 ft.addToBackStack(null);
                 ft.commit();
+            }
+        });
 
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SearchMovieFragment searchMovieFragment = SearchMovieFragment.newInstance();
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.fragment_container, searchMovieFragment);
+                ft.addToBackStack(null);
+                ft.commit();
             }
         });
         return view;

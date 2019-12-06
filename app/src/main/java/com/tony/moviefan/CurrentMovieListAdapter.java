@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieListAdapter.CurrentMovieListViewHolder> {
@@ -17,6 +18,12 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
     private static String TAG = "CURRENT_MOVIE_LIST_ADAPTER";
 
     public CurrentMovieListAdapter(List<Movie> data) {this.data = data;}
+
+    public void setMovies(ArrayList<Movie> data) {
+        this.data = data;
+    }
+
+
 
     static class CurrentMovieListViewHolder extends RecyclerView.ViewHolder {
 
@@ -58,7 +65,7 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         holder.descriptionTextView.setText(movie.getOverview());
         holder.titleTextView.setText(movie.getTitle());
         holder.genreTextView.setText(movie.getGenres());
-        holder.dateTextView.setText(movie.getDate());
+        holder.dateTextView.setText("Released " +movie.getDate());
 
     }
 
@@ -66,6 +73,8 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
     public int getItemCount() {
         return data.size();
     }
+
+
 
 
 

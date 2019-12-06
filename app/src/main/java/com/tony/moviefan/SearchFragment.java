@@ -1,5 +1,6 @@
 package com.tony.moviefan;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -41,10 +43,14 @@ public class SearchFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private CurrentMovieListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<Movie> mMovies;
+    private HashMap<Integer, String> genres;
+
+    private ArrayList<Movie> mMovies;
+    private String title;
+
 
     private static String key = BuildConfig.MOVIE_TOKEN;
 
@@ -80,6 +86,8 @@ public class SearchFragment extends Fragment {
         mAdapter = new CurrentMovieListAdapter(mMovies);
         mRecyclerView.setAdapter(mAdapter);
 
+        getGenres();
+
 
         getMoviesShowingCurrently();
 
@@ -89,30 +97,27 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    private void getMoviesShowingCurrently() {
+    public HashMap<Integer, String> getGenres() {
+        genres = new HashMap<>();
+
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String urlMovies = "https://api.themoviedb.org/3/movie/now_playing?api_key="+key+"&language=en-US&page=1";
         String urlGenres = "https://api.themoviedb.org/3/genre/movie/list?api_key="+key+"&language=en-US";
 
-        JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlMovies, null,
+        JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlGenres, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
                         try {
-                            JSONArray resultArray = response.getJSONArray("results");
+                            JSONArray resultArray = response.getJSONArray("genres");
                             for (int i = 0; i < resultArray.length(); i++) {
-
                                 JSONObject obj = resultArray.getJSONObject(i);
-                                String title = obj.getString("original_title");
-                                String description = obj.getString("overview");
-                                String date = obj.getString("release_date");
-                                String genre = "horror";
-                                mMovies.add(new Movie(title, description, genre, date));
-                                mAdapter.notifyItemInserted(mMovies.size() -1);
+                                int id = obj.getInt("id");
+                                String name = obj.getString("name");
+                                Log.d(TAG, "Adding " + name);
+                                genres.put(id, name);
                             }
-
                         } catch (JSONException e) {
                             Log.e(TAG, "Error processing JSON resposne", e);
                         }
@@ -126,9 +131,84 @@ public class SearchFragment extends Fragment {
         );
         queue.add(movieRequest);
 
+        return genres;
 
     }
 
+    private void getMoviesShowingCurrently() {
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String urlMovies = "https://api.themoviedb.org/3/movie/now_playing?api_key="+key+"&language=en-US&page=1";
+
+
+        JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlMovies, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        ArrayList <Movie> Movies = processResponse(response);
+                        mMovies = Movies;
+                        Log.d(TAG, mMovies.toString());
+                        mAdapter.setMovies(mMovies);
+                        mAdapter.notifyDataSetChanged();
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        queue.add(movieRequest);
+    }
+
+    private ArrayList<Movie> processResponse(JSONObject response) {
+
+        ArrayList <Movie> Movies  = new ArrayList<>();
+        try {
+            JSONArray resultArray = response.getJSONArray("results");
+            for (int i = 0; i < resultArray.length(); i++) {
+
+                JSONObject obj = resultArray.getJSONObject(i);
+                String lang = obj.getString("original_language");
+                if (lang.equals("en")){
+                    title = obj.getString("original_title");
+                }else {
+                    title = obj.getString("title");
+                }
+
+                String description = obj.getString("overview");
+                String date = obj.getString("release_date");
+                JSONArray genre_ids = obj.getJSONArray("genre_ids");
+                for (int j = 0; j < genre_ids.length(); j++) {
+                    int code = genre_ids.getInt(j);
+                    convertToGenreString();
+                    genres.get(code);
+
+                    Log.d(TAG, "genre " + genre_ids.getInt(j));
+                }
+
+                Log.d(TAG, "Adding movie "+ title);
+                Movies.add(new Movie(title, description, "horror", date));
+
+
+            }
+            return Movies;
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Error processing JSON resposne", e);
+        }
+        return null;
+
+    }
+
+    private void convertToGenreString() {
+
+
+
+
+    }
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
