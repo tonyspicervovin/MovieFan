@@ -50,6 +50,7 @@ public class SearchFragment extends Fragment {
 
     private ArrayList<Movie> mMovies;
     private String title;
+    private String genreCombined = "";
 
 
     private static String key = BuildConfig.MOVIE_TOKEN;
@@ -79,14 +80,19 @@ public class SearchFragment extends Fragment {
         mMovies=new ArrayList<>();
 
         mRecyclerView = view.findViewById(R.id.showing_movies_list);
+        //registering widgets
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        //setting up recyclerview
 
         mAdapter = new CurrentMovieListAdapter(mMovies);
         mRecyclerView.setAdapter(mAdapter);
+        //setting up adapter
 
-        getGenres();
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        getGenres(queue);
 
 
         getMoviesShowingCurrently();
@@ -97,11 +103,13 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    public HashMap<Integer, String> getGenres() {
+    public HashMap<Integer, String> getGenres(RequestQueue queue) {
+
+        Log.d(TAG, "fetching genres");
         genres = new HashMap<>();
 
 
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
+
         String urlGenres = "https://api.themoviedb.org/3/genre/movie/list?api_key="+key+"&language=en-US";
 
         JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlGenres, null,
@@ -181,16 +189,17 @@ public class SearchFragment extends Fragment {
                 String description = obj.getString("overview");
                 String date = obj.getString("release_date");
                 JSONArray genre_ids = obj.getJSONArray("genre_ids");
+
                 for (int j = 0; j < genre_ids.length(); j++) {
                     int code = genre_ids.getInt(j);
-                    convertToGenreString();
-                    genres.get(code);
-
+                    String genre = convertToGenreString(code);
+                    genreCombined = genreCombined +" " + genre;
                     Log.d(TAG, "genre " + genre_ids.getInt(j));
                 }
 
                 Log.d(TAG, "Adding movie "+ title);
-                Movies.add(new Movie(title, description, "horror", date));
+                Movies.add(new Movie(title, description, genreCombined, date));
+                genreCombined = "";
 
 
             }
@@ -203,11 +212,11 @@ public class SearchFragment extends Fragment {
 
     }
 
-    private void convertToGenreString() {
+    private String convertToGenreString(int code) {
 
+        String genreString  = genres.get(code);
 
-
-
+        return genreString;
     }
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
