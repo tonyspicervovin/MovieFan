@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.tony.moviefan.R;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener, SearchMovieFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener, SearchMovieFragment.OnFragmentInteractionListener, ViewFavoritesFragment.OnFragmentInteractionListener {
 
 
 

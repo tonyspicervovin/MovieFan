@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -89,7 +88,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
         View view = inflater.inflate(R.layout.fragment_search_movie, container, false);
         mMovies = new ArrayList<Movie>();
 
-        mRecyclerView = view.findViewById(R.id.show_searched_movie_list);
+        mRecyclerView = view.findViewById(R.id.show_matching_list);
         searchString = view.findViewById(R.id.searchString);
         searchButton = view.findViewById(R.id.searchMatchingButton);
         //registering widgets
@@ -99,7 +98,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
         mRecyclerView.setLayoutManager(mLayoutManager);
         //setting up recyclerview
 
-        mAdapter = new CurrentMovieListAdapter(mMovies, this);
+        mAdapter = new CurrentMovieListAdapter(mMovies, this, "Save to Favorites");
         mRecyclerView.setAdapter(mAdapter);
         //setting up adapter
 
@@ -241,8 +240,12 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
         Movie movie = mMovies.get(position);
         moviesViewModel.insert(movie);
 
-
         Log.d(TAG, "Added " + movie.getName());
+
+    }
+
+    @Override
+    public void onClick(int position) {
 
     }
 

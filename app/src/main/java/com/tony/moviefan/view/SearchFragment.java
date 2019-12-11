@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class SearchFragment extends Fragment implements SaveFavoriteListener{
@@ -50,7 +51,7 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
 
     private HashMap<Integer, String> genres;
 
-    private ArrayList<Movie> mMovies;
+    private List<Movie> mMovies;
     private String title;
     private String genreCombined = "";
 
@@ -81,7 +82,7 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        mMovies=new ArrayList<>();
+        mMovies= new ArrayList<>();
 
         mRecyclerView = view.findViewById(R.id.showing_movies_list);
         //registering widgets
@@ -91,7 +92,7 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
         mRecyclerView.setLayoutManager(mLayoutManager);
         //setting up recyclerview
 
-        mAdapter = new CurrentMovieListAdapter(mMovies,this);
+        mAdapter = new CurrentMovieListAdapter(mMovies,this, "Save to Favorites");
         mRecyclerView.setAdapter(mAdapter);
         //setting up adapter
 
@@ -248,6 +249,11 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
         Movie movie = mMovies.get(position);
         moviesViewModel.insert(movie);
 
+
+    }
+
+    @Override
+    public void onClick(int position) {
 
     }
 

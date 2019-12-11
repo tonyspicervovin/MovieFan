@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import com.tony.moviefan.R;
 import com.tony.moviefan.model.Movie;
@@ -20,19 +21,16 @@ import com.tony.moviefan.viewmodel.MoviesViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieListAdapter.CurrentMovieListViewHolder> {
+public class FavoriteMovieListAdapter extends Adapter<FavoriteMovieListAdapter.FavoriteMovieListViewHolder> {
 
     private List<Movie> data;
-    private String buttonText;
-    private static String TAG = "CURRENT_MOVIE_LIST_ADAPTER";
+    private static String TAG = "FAVORITE_MOVIE_LIST_ADAPTER";
 
     private SaveFavoriteListener listener;
 
-    public CurrentMovieListAdapter(List<Movie> data, SaveFavoriteListener listener, String buttontext) {
+    public FavoriteMovieListAdapter(List<Movie> data) {
         this.data = data;
         this.listener = listener;
-        this.buttonText = buttontext;
 
     }
 
@@ -41,7 +39,7 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
     }
 
 
-    static class CurrentMovieListViewHolder extends RecyclerView.ViewHolder {
+    static class FavoriteMovieListViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout layout;
         TextView titleTextView;
@@ -51,7 +49,7 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         Button favoriteButton;
         SaveFavoriteListener listener;
 
-        CurrentMovieListViewHolder(LinearLayout layout, SaveFavoriteListener listener) {
+        FavoriteMovieListViewHolder(LinearLayout layout, SaveFavoriteListener listener) {
 
             super(layout);
             this.layout = layout;
@@ -64,25 +62,22 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
             favoriteButton = layout.findViewById(R.id.saveFavoriteButton);
 
 
-
-
         }
     }
 
     @NonNull
     @Override
-    public CurrentMovieListAdapter.CurrentMovieListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavoriteMovieListAdapter.FavoriteMovieListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LinearLayout layout = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.current_movie_list_element, parent, false);
-        CurrentMovieListViewHolder viewHolder = new CurrentMovieListViewHolder(layout,listener);
+                .inflate(R.layout.favorite_movie_list_element, parent, false);
+        FavoriteMovieListViewHolder viewHolder = new FavoriteMovieListViewHolder(layout,listener);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CurrentMovieListAdapter.CurrentMovieListViewHolder holder, final int position) {
-
+    public void onBindViewHolder(@NonNull final FavoriteMovieListAdapter.FavoriteMovieListViewHolder holder, final int position) {
         final Movie movie = data.get(position);
         String name = movie.getName();
         Log.d(TAG, "binding movie " + name);
@@ -90,7 +85,6 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         holder.titleTextView.setText(movie.getName());
         holder.genreTextView.setText(movie.getGenres());
         holder.dateTextView.setText(movie.getDate());
-        holder.favoriteButton.setText(buttonText);
 
 
         holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +92,8 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
             public void onClick(View view) {
 
                 listener.onAddFavorite(position);
+
+
                 Log.d(TAG, "Saving " + movie.getName());
             }
         });
@@ -106,12 +102,8 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return 0;
     }
-
-
-
-
 
 
 }
