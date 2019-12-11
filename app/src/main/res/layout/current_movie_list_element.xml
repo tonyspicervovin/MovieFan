@@ -37,9 +37,19 @@
         android:id="@+id/dateTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10pt"
+        android:layout_marginBottom="4pt"
         android:layout_weight="1"
         android:background="#F5BBCB"
         android:text="TextView"
         android:textColor="#52332A" />
+
+    <Button
+        android:id="@+id/saveFavoriteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10pt"
+        android:layout_weight="1"
+        android:background="#EC91AC"
+        android:text="Save to favorites" />
+
 </LinearLayout>

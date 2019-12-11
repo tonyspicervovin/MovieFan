@@ -1,11 +1,13 @@
-package com.tony.moviefan;
+package com.tony.moviefan.view;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import com.tony.moviefan.BuildConfig;
+import com.tony.moviefan.R;
+import com.tony.moviefan.model.Movie;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,53 +25,40 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 
+public class SearchFragment extends Fragment {
 
+    private static final String TAG = "SEARCH_FRAGMENT";
 
-
-
-public class SearchMovieFragment extends Fragment {
-
-    private static final String TAG = "SEARCH_MOVIE_FRAGMENT";
+    private OnFragmentInteractionListener mListener;
 
     private RecyclerView mRecyclerView;
     private CurrentMovieListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private EditText searchString;
-    private Button searchButton;
 
-    private String title;
-    private String genreCombined = "";
-
-    private ArrayList<Movie> mMovies;
     private HashMap<Integer, String> genres;
 
-
+    private ArrayList<Movie> mMovies;
+    private String title;
+    private String genreCombined = "";
 
     private static String key = BuildConfig.MOVIE_TOKEN;
 
 
-
-    private OnFragmentInteractionListener mListener;
-
-    public SearchMovieFragment() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
-
-    public static SearchMovieFragment newInstance() {
-        SearchMovieFragment fragment = new SearchMovieFragment();
+    public static SearchFragment newInstance() {
+        SearchFragment fragment = new SearchFragment();
 
         return fragment;
     }
@@ -80,19 +66,17 @@ public class SearchMovieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search_movie, container, false);
-        mMovies = new ArrayList<Movie>();
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        mRecyclerView = view.findViewById(R.id.show_searched_movie_list);
-        searchString = view.findViewById(R.id.searchString);
-        searchButton = view.findViewById(R.id.searchMatchingButton);
+        mMovies=new ArrayList<>();
+
+        mRecyclerView = view.findViewById(R.id.showing_movies_list);
         //registering widgets
 
         mRecyclerView.setHasFixedSize(true);
@@ -104,30 +88,61 @@ public class SearchMovieFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         //setting up adapter
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String search = searchString.getText().toString();
-                if (search.isEmpty()) {
-                    Toast.makeText(getContext(), "Enter a word", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                //retrieving users search, showing msg if nothing is entered
-                getSearchedForMovies(search);
-            }
-        });
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        getGenres(queue);
 
 
-        getGenres();
+        getMoviesShowingCurrently();
+
+
 
         return view;
     }
 
+    public HashMap<Integer, String> getGenres(RequestQueue queue) {
 
-    private void getSearchedForMovies(String search) {
+        Log.d(TAG, "fetching genres");
+        genres = new HashMap<>();
+
+
+
+        String urlGenres = "https://api.themoviedb.org/3/genre/movie/list?api_key="+key+"&language=en-US";
+
+        JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlGenres, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            JSONArray resultArray = response.getJSONArray("genres");
+                            for (int i = 0; i < resultArray.length(); i++) {
+                                JSONObject obj = resultArray.getJSONObject(i);
+                                int id = obj.getInt("id");
+                                String name = obj.getString("name");
+                                Log.d(TAG, "Adding " + name);
+                                genres.put(id, name);
+                            }
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Error processing JSON resposne", e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        queue.add(movieRequest);
+
+        return genres;
+
+    }
+
+    private void getMoviesShowingCurrently() {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String urlMovies = "https://api.themoviedb.org/3/search/movie?api_key="+key+"&language=en-US&page=1&include_adult=false&query="+search;
+        String urlMovies = "https://api.themoviedb.org/3/movie/now_playing?api_key="+key+"&language=en-US&page=1";
 
 
         JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlMovies, null,
@@ -152,16 +167,11 @@ public class SearchMovieFragment extends Fragment {
         queue.add(movieRequest);
     }
 
-
-
     private ArrayList<Movie> processResponse(JSONObject response) {
 
         ArrayList <Movie> Movies  = new ArrayList<>();
         try {
             JSONArray resultArray = response.getJSONArray("results");
-            if (resultArray.length() == 0){
-                Toast.makeText(getContext(), "No results found", Toast.LENGTH_SHORT).show();
-            }
             for (int i = 0; i < resultArray.length(); i++) {
 
                 JSONObject obj = resultArray.getJSONObject(i);
@@ -175,17 +185,18 @@ public class SearchMovieFragment extends Fragment {
                 String description = obj.getString("overview");
                 String date = obj.getString("release_date");
                 JSONArray genre_ids = obj.getJSONArray("genre_ids");
+
                 for (int j = 0; j < genre_ids.length(); j++) {
                     int code = genre_ids.getInt(j);
                     String genre = convertToGenreString(code);
-                    genreCombined = genreCombined + " " + genre;
-
+                    genreCombined = genreCombined +" " + genre;
                     Log.d(TAG, "genre " + genre_ids.getInt(j));
                 }
 
                 Log.d(TAG, "Adding movie "+ title);
                 Movies.add(new Movie(title, description, genreCombined, date));
                 genreCombined = "";
+
 
             }
             return Movies;
@@ -197,27 +208,16 @@ public class SearchMovieFragment extends Fragment {
 
     }
 
-
-    private void getGenres() {
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        SearchFragment searchFragment = new SearchFragment();
-        HashMap<Integer, String> theGenres = searchFragment.getGenres(queue);
-        genres = theGenres;
-        Log.d(TAG,theGenres.toString());
-    }
-
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     private String convertToGenreString(int code) {
 
         String genreString  = genres.get(code);
 
         return genreString;
+    }
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
     }
 
     @Override
@@ -237,9 +237,10 @@ public class SearchMovieFragment extends Fragment {
         mListener = null;
     }
 
-
     public interface OnFragmentInteractionListener {
-
         void onFragmentInteraction(Uri uri);
     }
+
+
+
 }

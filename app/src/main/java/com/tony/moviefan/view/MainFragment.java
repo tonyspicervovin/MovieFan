@@ -1,4 +1,4 @@
-package com.tony.moviefan;
+package com.tony.moviefan.view;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import com.tony.moviefan.R;
 
 
 public class MainFragment extends Fragment {

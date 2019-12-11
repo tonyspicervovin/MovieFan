@@ -1,10 +1,26 @@
-package com.tony.moviefan;
+package com.tony.moviefan.model;
 
 public class Movie {
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    private int id;
     private String title;
     private String overview;
     private String genres;
+    private String date;
+    private float rating;
+
 
     public Movie(String title, String overview, String genres, String date) {
         this.title = title;
@@ -12,9 +28,6 @@ public class Movie {
         this.genres = genres;
         this.date = date;
     }
-
-    private String date;
-
 
 
     public String getDate() {
@@ -60,4 +73,7 @@ public class Movie {
                 '}';
     }
 
+    public float getRating() {
+        return rating;
+    }
 }
