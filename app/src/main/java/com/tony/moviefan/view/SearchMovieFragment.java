@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class SearchMovieFragment extends Fragment {
+public class SearchMovieFragment extends Fragment implements SaveFavoriteListener{
 
     private static final String TAG = "SEARCH_MOVIE_FRAGMENT";
 
@@ -99,7 +99,7 @@ public class SearchMovieFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         //setting up recyclerview
 
-        mAdapter = new CurrentMovieListAdapter(mMovies);
+        mAdapter = new CurrentMovieListAdapter(mMovies, this);
         mRecyclerView.setAdapter(mAdapter);
         //setting up adapter
 
@@ -115,9 +115,10 @@ public class SearchMovieFragment extends Fragment {
                 getSearchedForMovies(search);
             }
         });
-        Movie a = new Movie("hellraiser","fun movie", "horror", "11-25-1994");
-        moviesViewModel.insert(a);
+        //Movie a = new Movie("hellraiser","fun movie", "horror", "11-25-1994");
+        //moviesViewModel.insert(a);
         getGenres();
+
 
         return view;
     }
@@ -233,6 +234,16 @@ public class SearchMovieFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onAddFavorite(int position) {
+        Movie movie = mMovies.get(position);
+        moviesViewModel.insert(movie);
+
+
+        Log.d(TAG, "Added " + movie.getName());
+
     }
 
 

@@ -15,15 +15,23 @@ public class Movie {
     }
 
     private int id;
-    private String title;
+    private String name;
     private String overview;
     private String genres;
     private String date;
     private float rating;
 
 
-    public Movie(String title, String overview, String genres, String date) {
-        this.title = title;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Movie(String name, String overview, String genres, String date) {
+        this.name = name;
         this.overview = overview;
         this.genres = genres;
         this.date = date;
@@ -39,13 +47,7 @@ public class Movie {
     }
 
 
-    public String getTitle() {
-        return title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getOverview() {
         return overview;
@@ -66,7 +68,7 @@ public class Movie {
     @Override
     public String toString() {
         return "Movie{" +
-                "title='" + title + '\'' +
+                "name='" + name + '\'' +
                 ", overview='" + overview + '\'' +
                 ", genres='" + genres + '\'' +
                 ", date='" + date + '\'' +

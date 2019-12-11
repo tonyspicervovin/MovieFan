@@ -25,12 +25,17 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
     private List<Movie> data;
     private static String TAG = "CURRENT_MOVIE_LIST_ADAPTER";
 
-    public CurrentMovieListAdapter(List<Movie> data) {this.data = data;}
+    private SaveFavoriteListener listener;
+
+    public CurrentMovieListAdapter(List<Movie> data, SaveFavoriteListener listener) {
+        this.data = data;
+        this.listener = listener;
+
+    }
 
     public void setMovies(ArrayList<Movie> data) {
         this.data = data;
     }
-
 
 
     static class CurrentMovieListViewHolder extends RecyclerView.ViewHolder {
@@ -41,23 +46,19 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         TextView descriptionTextView;
         TextView dateTextView;
         Button favoriteButton;
+        SaveFavoriteListener listener;
 
-        CurrentMovieListViewHolder(LinearLayout layout) {
+        CurrentMovieListViewHolder(LinearLayout layout, SaveFavoriteListener listener) {
 
             super(layout);
             this.layout = layout;
+            this.listener = listener;
+
             titleTextView = layout.findViewById(R.id.titleTextView);
             genreTextView = layout.findViewById(R.id.genreTextView);
             dateTextView = layout.findViewById(R.id.dateTextView);
             descriptionTextView = layout.findViewById(R.id.descriptionTextView);
             favoriteButton = layout.findViewById(R.id.saveFavoriteButton);
-
-
-
-
-
-
-
         }
     }
 
@@ -67,19 +68,19 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
 
         LinearLayout layout = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.current_movie_list_element, parent, false);
-        CurrentMovieListViewHolder viewHolder = new CurrentMovieListViewHolder(layout);
+        CurrentMovieListViewHolder viewHolder = new CurrentMovieListViewHolder(layout,listener);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CurrentMovieListAdapter.CurrentMovieListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final CurrentMovieListAdapter.CurrentMovieListViewHolder holder, final int position) {
 
         final Movie movie = data.get(position);
-        String title = movie.getTitle();
-        Log.d(TAG, "binding movie " + title);
+        String name = movie.getName();
+        Log.d(TAG, "binding movie " + name);
         holder.descriptionTextView.setText(movie.getOverview());
-        holder.titleTextView.setText(movie.getTitle());
+        holder.titleTextView.setText(movie.getName());
         holder.genreTextView.setText(movie.getGenres());
         holder.dateTextView.setText(movie.getDate());
 
@@ -88,8 +89,10 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
             @Override
             public void onClick(View view) {
 
+                listener.onAddFavorite(position);
 
-                Log.d(TAG, "Saving " + movie.getTitle());
+
+                Log.d(TAG, "Saving " + movie.getName());
             }
         });
 

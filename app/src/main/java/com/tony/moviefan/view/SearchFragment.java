@@ -9,6 +9,7 @@ import com.tony.moviefan.R;
 import com.tony.moviefan.model.Movie;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.tony.moviefan.viewmodel.MoviesViewModel;
 
 
 import org.json.JSONArray;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements SaveFavoriteListener{
 
     private static final String TAG = "SEARCH_FRAGMENT";
 
@@ -43,6 +45,8 @@ public class SearchFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private CurrentMovieListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private MoviesViewModel moviesViewModel;
+
 
     private HashMap<Integer, String> genres;
 
@@ -65,7 +69,10 @@ public class SearchFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        moviesViewModel = ViewModelProviders.of(getActivity()).get(MoviesViewModel.class);
+
     }
 
     @Override
@@ -84,7 +91,7 @@ public class SearchFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         //setting up recyclerview
 
-        mAdapter = new CurrentMovieListAdapter(mMovies);
+        mAdapter = new CurrentMovieListAdapter(mMovies,this);
         mRecyclerView.setAdapter(mAdapter);
         //setting up adapter
 
@@ -103,7 +110,6 @@ public class SearchFragment extends Fragment {
 
         Log.d(TAG, "fetching genres");
         genres = new HashMap<>();
-
 
 
         String urlGenres = "https://api.themoviedb.org/3/genre/movie/list?api_key="+key+"&language=en-US";
@@ -235,6 +241,14 @@ public class SearchFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onAddFavorite(int position) {
+        Movie movie = mMovies.get(position);
+        moviesViewModel.insert(movie);
+
+
     }
 
     public interface OnFragmentInteractionListener {
