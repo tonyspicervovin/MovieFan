@@ -162,7 +162,9 @@ public class MovieRepository {
     }
 
 
-    public void delete(final Movie movie) {
+    public MutableLiveData<String> delete(final Movie movie) {
+
+        final MutableLiveData<String> deleteResult = new MutableLiveData<>();
 
         mMovieService.delete(movie.getId()).enqueue(new Callback<Void>() {
 
@@ -170,6 +172,7 @@ public class MovieRepository {
             public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "deleted movie " + movie);
+                    deleteResult.setValue("success");
                     getAllMovies();
                 }else {
                     Log.e(TAG, "Error deleting movie, message from server: " + response.message());
@@ -180,9 +183,11 @@ public class MovieRepository {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.e(TAG, "Error deleting movie " + movie, t);
+                deleteResult.setValue("Error");
 
             }
         });
+        return deleteResult;
 
     }
 

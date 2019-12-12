@@ -9,6 +9,7 @@ import com.tony.moviefan.R;
 import com.tony.moviefan.model.Movie;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -247,7 +249,12 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
     @Override
     public void onAddFavorite(int position) {
         Movie movie = mMovies.get(position);
-        moviesViewModel.insert(movie);
+        moviesViewModel.insert(movie).observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getActivity(), "Insert " + s, Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }

@@ -39,7 +39,7 @@ public class MoviesViewModel extends AndroidViewModel {
         mMovieRepository.update(movie);
     }
 
-    public void delete(Movie movie) {
-        mMovieRepository.delete(movie);
+    public MutableLiveData<String> delete(Movie movie) {
+        return mMovieRepository.delete(movie);
     }
 }

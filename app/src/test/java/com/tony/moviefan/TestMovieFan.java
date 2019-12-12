@@ -87,8 +87,6 @@ public class TestMovieFan {
                 "}\n" +
                 "]\n" +
                 "}");
-        Movie movie1 = new Movie("Oldboy", "With no clue how he came to be imprisoned, drugged and tortured for 15 years, a desperate businessman seeks revenge on his captors.", "")
-
 
         /*JSONObject jsonObject = new JSONObject();
         jsonObject.put("page",1);

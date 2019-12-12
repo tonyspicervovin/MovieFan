@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -240,7 +241,12 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
     public void onAddFavorite(int position) {
         Log.d(TAG, String.valueOf(position));
         Movie movie = mMovies.get(position);
-        moviesViewModel.insert(movie);
+        moviesViewModel.insert(movie).observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getActivity(), "Insert " + s, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Log.d(TAG, "Added " + movie.getName());
 

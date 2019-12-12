@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.tony.moviefan.R;
 import com.tony.moviefan.model.Movie;
@@ -116,7 +117,12 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
     public void onDeleteFavorite(int position) {
         Log.d(TAG, String.valueOf(position));
         Movie movie = mMovies.get(position);
-        moviesViewModel.delete(movie);
+        moviesViewModel.delete(movie).observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getActivity(), "Delete " + s, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public interface OnFragmentInteractionListener {

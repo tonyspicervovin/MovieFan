@@ -40,12 +40,13 @@
     <Button
         android:id="@+id/searchMatchingButton"
         android:layout_width="112dp"
-        android:layout_height="47dp"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:background="#3B4683"
         android:text="Search"
+        android:textColor="#F7F7F8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
