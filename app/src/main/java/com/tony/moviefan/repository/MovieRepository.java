@@ -25,7 +25,7 @@ public class MovieRepository {
     private final String baseURL = "https://rest-movie-api.herokuapp.com/api/";
     private MutableLiveData<List<Movie>> mAllMovies;
 
-    public MovieRepository(SaveFavoriteListener listener) {
+    public MovieRepository() {
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new AuthorizationHeaderInterceptor())

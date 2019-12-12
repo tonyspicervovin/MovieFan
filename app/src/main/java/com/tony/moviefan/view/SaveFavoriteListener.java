@@ -5,4 +5,5 @@ public interface SaveFavoriteListener {
     void onAddFavorite(int position);
     void onDeleteFavorite(int position);
 
+
 }

@@ -20,6 +20,7 @@ public class MoviesViewModel extends AndroidViewModel {
     public MoviesViewModel(@NonNull Application application){
 
         super(application);
+        mMovieRepository = new MovieRepository();
         allMovies = mMovieRepository.getAllMovies();
     }
     public MutableLiveData<List<Movie>> getAllMovies() {

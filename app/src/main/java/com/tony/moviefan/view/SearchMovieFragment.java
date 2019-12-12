@@ -76,7 +76,6 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         moviesViewModel = ViewModelProviders.of(getActivity()).get(MoviesViewModel.class);
 
     }
