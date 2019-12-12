@@ -162,30 +162,32 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
                 Toast.makeText(getContext(), "No results found", Toast.LENGTH_SHORT).show();
             }
             for (int i = 0; i < resultArray.length(); i++) {
+                try {
+                    JSONObject obj = resultArray.getJSONObject(i);
+                    String lang = obj.getString("original_language");
+                    if (lang.equals("en")) {
+                        title = obj.getString("original_title");
+                    } else {
+                        title = obj.getString("title");
+                    }
 
-                JSONObject obj = resultArray.getJSONObject(i);
-                String lang = obj.getString("original_language");
-                if (lang.equals("en")){
-                    title = obj.getString("original_title");
-                }else {
-                    title = obj.getString("title");
+                    String description = obj.getString("overview");
+                    String date = obj.getString("release_date");
+                    JSONArray genre_ids = obj.getJSONArray("genre_ids");
+                    for (int j = 0; j < genre_ids.length(); j++) {
+                        int code = genre_ids.getInt(j);
+                        String genre = convertToGenreString(code);
+                        genreCombined = genreCombined + " " + genre;
+
+                        Log.d(TAG, "genre " + genre_ids.getInt(j));
+                    }
+
+                    Log.d(TAG, "Adding movie " + title);
+                    Movies.add(new Movie(title, description, genreCombined, date));
+                    genreCombined = "";
+                }catch (JSONException e) {
+                    Log.e(TAG, "Error processing JSON resposne", e);
                 }
-
-                String description = obj.getString("overview");
-                String date = obj.getString("release_date");
-                JSONArray genre_ids = obj.getJSONArray("genre_ids");
-                for (int j = 0; j < genre_ids.length(); j++) {
-                    int code = genre_ids.getInt(j);
-                    String genre = convertToGenreString(code);
-                    genreCombined = genreCombined + " " + genre;
-
-                    Log.d(TAG, "genre " + genre_ids.getInt(j));
-                }
-
-                Log.d(TAG, "Adding movie "+ title);
-                Movies.add(new Movie(title, description, genreCombined, date));
-                genreCombined = "";
-
             }
             return Movies;
 
@@ -237,6 +239,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
 
     @Override
     public void onAddFavorite(int position) {
+        Log.d(TAG, String.valueOf(position));
         Movie movie = mMovies.get(position);
         moviesViewModel.insert(movie);
 
@@ -245,7 +248,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
     }
 
     @Override
-    public void onClick(int position) {
+    public void onDeleteFavorite(int position) {
 
     }
 

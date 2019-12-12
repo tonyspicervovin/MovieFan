@@ -96,7 +96,9 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (buttonText.equals("Delete from Favorites")){
+                    listener.onDeleteFavorite(position);
+                }
                 listener.onAddFavorite(position);
                 Log.d(TAG, "Saving " + movie.getName());
             }
@@ -108,10 +110,5 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
     public int getItemCount() {
         return data.size();
     }
-
-
-
-
-
 
 }

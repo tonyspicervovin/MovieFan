@@ -253,7 +253,7 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
     }
 
     @Override
-    public void onClick(int position) {
+    public void onDeleteFavorite(int position) {
 
     }
 

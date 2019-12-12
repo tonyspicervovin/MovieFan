@@ -63,13 +63,6 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
         Log.d(TAG, "favorite fragment");
 
         deleteButton = view.findViewById(R.id.delete_button);
-        deleteButton.setText("Delete");
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Set it to delete");
-            }
-        });
         mMovies = new ArrayList<Movie>();
 
         mRecyclerView = view.findViewById(R.id.show_favorite_list);
@@ -84,6 +77,7 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
         moviesViewModel.getAllMovies().observe(getActivity(), new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
+                mMovies = (ArrayList<Movie>) movies;
                 mAdapter.setMovies(movies);
                 mAdapter.notifyDataSetChanged();
             }
@@ -119,8 +113,10 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
     }
 
     @Override
-    public void onClick(int position) {
-
+    public void onDeleteFavorite(int position) {
+        Log.d(TAG, String.valueOf(position));
+        Movie movie = mMovies.get(position);
+        moviesViewModel.delete(movie);
     }
 
     public interface OnFragmentInteractionListener {

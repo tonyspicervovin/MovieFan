@@ -5,9 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.tony.moviefan.model.Movie;
-import com.android.volley.Response;
 import com.tony.moviefan.service.AuthorizationHeaderInterceptor;
 import com.tony.moviefan.service.MovieService;
+import com.tony.moviefan.view.SaveFavoriteListener;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class MovieRepository {
     private final String baseURL = "https://rest-movie-api.herokuapp.com/api/";
     private MutableLiveData<List<Movie>> mAllMovies;
 
-    public MovieRepository() {
+    public MovieRepository(SaveFavoriteListener listener) {
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new AuthorizationHeaderInterceptor())
