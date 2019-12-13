@@ -257,6 +257,11 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
 
     }
 
+    @Override
+    public void onLongClick(Movie movie) {
+
+    }
+
 
     public interface OnFragmentInteractionListener {
 

@@ -29,6 +29,7 @@ public class MovieRepository {
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new AuthorizationHeaderInterceptor())
+                .retryOnConnectionFailure(true)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()

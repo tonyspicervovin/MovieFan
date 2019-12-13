@@ -51,7 +51,7 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         Button favoriteButton;
         SaveFavoriteListener listener;
 
-        CurrentMovieListViewHolder(LinearLayout layout, SaveFavoriteListener listener) {
+        CurrentMovieListViewHolder(LinearLayout layout, final SaveFavoriteListener listener) {
 
             super(layout);
             this.layout = layout;
@@ -62,6 +62,8 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
             dateTextView = layout.findViewById(R.id.dateTextView);
             descriptionTextView = layout.findViewById(R.id.descriptionTextView);
             favoriteButton = layout.findViewById(R.id.saveFavoriteButton);
+
+
 
 
 
@@ -86,13 +88,19 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         final Movie movie = data.get(position);
         String name = movie.getName();
         Log.d(TAG, "binding movie " + name);
-        holder.descriptionTextView.setText(movie.getOverview());
-        holder.titleTextView.setText(movie.getName());
-        holder.genreTextView.setText(movie.getGenres());
-        holder.dateTextView.setText(movie.getDate());
+        holder.descriptionTextView.setText("Description: " + movie.getOverview());
+        holder.titleTextView.setText("Title: " + movie.getName());
+        holder.genreTextView.setText("Genres: " + movie.getGenres());
+        holder.dateTextView.setText("Date Released: " + movie.getDate());
         holder.favoriteButton.setText(buttonText);
 
-
+        holder.titleTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.onLongClick(movie);
+                return false;
+            }
+        });
         holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

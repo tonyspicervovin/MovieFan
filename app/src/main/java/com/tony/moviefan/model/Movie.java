@@ -1,6 +1,30 @@
 package com.tony.moviefan.model;
 
-public class Movie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Movie implements Parcelable {
+
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        overview = in.readString();
+        genres = in.readString();
+        date = in.readString();
+        rating = in.readFloat();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -37,6 +61,8 @@ public class Movie {
         this.date = date;
     }
 
+
+    public void setRating(Float rating){this.rating = rating;}
 
     public String getDate() {
         return date;
@@ -77,5 +103,20 @@ public class Movie {
 
     public float getRating() {
         return rating;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(overview);
+        parcel.writeString(genres);
+        parcel.writeString(date);
+        parcel.writeFloat(rating);
     }
 }

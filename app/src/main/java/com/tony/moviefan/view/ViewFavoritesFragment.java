@@ -5,11 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,6 +126,20 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
                 Toast.makeText(getActivity(), "Delete " + s, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onLongClick(Movie movie) {
+
+        /*Bundle bundle = new Bundle();
+        bundle.putParcelable("movie", (Parcelable) movie);*/
+        ViewMovieFragment viewMovieFragment = ViewMovieFragment.newInstance(movie);
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragment_container, viewMovieFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+
     }
 
     public interface OnFragmentInteractionListener {

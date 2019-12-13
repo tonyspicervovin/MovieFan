@@ -90,6 +90,7 @@ public class MainFragment extends Fragment {
                 ft.replace(R.id.fragment_container, viewFavoritesFragment);
                 ft.addToBackStack(null);
                 ft.commit();
+
             }
         });
         return view;
