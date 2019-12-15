@@ -53,6 +53,7 @@ public class MainFragment extends Fragment {
         searchButton = view.findViewById(R.id.searchButton);
         newButton = view.findViewById(R.id.new_button);
         viewFavoriteButton = view.findViewById(R.id.view_favorites_button);
+        //registering widgets
 
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +67,7 @@ public class MainFragment extends Fragment {
                 ft.commit();
             }
         });
+        //showing new movies playing in theatre fragment
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +81,7 @@ public class MainFragment extends Fragment {
                 ft.commit();
             }
         });
+        //showing fragment for searching for movies
 
         viewFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +93,10 @@ public class MainFragment extends Fragment {
                 ft.replace(R.id.fragment_container, viewFavoritesFragment);
                 ft.addToBackStack(null);
                 ft.commit();
-
             }
         });
         return view;
+        //showing view favorites fragment
     }
 
     public void onButtonPressed(Uri uri) {

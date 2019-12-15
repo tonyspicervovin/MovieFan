@@ -13,20 +13,12 @@ import com.tony.moviefan.R;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener, SearchMovieFragment.OnFragmentInteractionListener, ViewFavoritesFragment.OnFragmentInteractionListener, ViewMovieFragment.OnFragmentInteractionListener {
 
-
-
     private String TAG = "MAIN_ACTIVITY";
-
     private Button mShowWeather;
     private EditText mGetCity;
 
-
-
-
-
-
     public MainActivity() {
-        //empty constructer
+        //empty constructor
     }
 
     @Override

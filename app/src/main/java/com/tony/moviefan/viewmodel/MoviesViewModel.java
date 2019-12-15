@@ -35,8 +35,8 @@ public class MoviesViewModel extends AndroidViewModel {
         return mMovieRepository.insert(movie);
     }
 
-    public void update(Movie movie) {
-        mMovieRepository.update(movie);
+    public MutableLiveData<String> update(Movie movie) {
+        return mMovieRepository.update(movie);
     }
 
     public MutableLiveData<String> delete(Movie movie) {

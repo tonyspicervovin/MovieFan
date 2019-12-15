@@ -18,5 +18,5 @@ public class AuthorizationHeaderInterceptor implements Interceptor {
                 .build();
         return chain.proceed(requestWithHeaders);
     }
-    // creating a header parameter that we can use for each call
+    // creating a header parameter that we I use for each call with the authorization token
 }

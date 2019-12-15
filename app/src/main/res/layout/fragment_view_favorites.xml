@@ -9,7 +9,7 @@
     tools:context=".view.SearchMovieFragment">
 
     <EditText
-        android:id="@+id/searchString"
+        android:id="@+id/search_favorite_string"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -34,11 +34,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchString"
+        app:layout_constraintTop_toBottomOf="@+id/search_favorite_string"
         app:layout_constraintVertical_bias="0.51" />
 
     <Button
-        android:id="@+id/delete_button"
+        android:id="@+id/search_favorites"
         android:layout_width="112dp"
         android:layout_height="47dp"
         android:layout_marginTop="12dp"
@@ -46,6 +46,7 @@
         android:layout_marginRight="16dp"
         android:background="#3B4683"
         android:text="Search"
+        android:textColor="#F3F3ED"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

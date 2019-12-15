@@ -7,6 +7,5 @@ public interface SaveFavoriteListener {
     void onAddFavorite(int position);
     void onDeleteFavorite(int position);
     void onLongClick(Movie movie);
-
-
+    //listener for various click events
 }

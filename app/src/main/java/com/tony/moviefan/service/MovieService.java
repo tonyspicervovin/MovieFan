@@ -17,20 +17,20 @@ public interface MovieService {
     @GET("movies/")
     Call<List<Movie>> getAllMovies();
 
-    // Example - get movie by ID
     @GET("movies/{id}/")
     Call<Movie> get(@Path("id") int id);
+    //get movie by ID
 
-    //  POST insert movie
     @POST("movies/")
     Call<Void> insert(@Body Movie movie);
+    // insert movie
 
-    //  PATCH update movie
-    @PATCH("movies/{id}")
+    @PATCH("movies/{id}/")
     Call<Void> update(@Body Movie m, @Path("id") int id);
+    // update movie
 
     @DELETE("movies/{id}/")
     Call<Void> delete(@Path("id") int id);
-
+    // delete movie
 
 }

@@ -72,9 +72,6 @@ public class Movie implements Parcelable {
         this.date = date;
     }
 
-
-
-
     public String getOverview() {
         return overview;
     }
@@ -120,3 +117,4 @@ public class Movie implements Parcelable {
         parcel.writeFloat(rating);
     }
 }
+//Model for movies

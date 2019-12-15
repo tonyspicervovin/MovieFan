@@ -1,6 +1,7 @@
 package com.tony.moviefan.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -36,6 +38,7 @@ public class ViewMovieFragment extends Fragment {
     private RatingBar ratingBar;
     private Button saveRating;
     private Float rating;
+    private ImageButton rottenTomatoeButton;
 
     private MoviesViewModel moviesViewModel;
 
@@ -80,14 +83,23 @@ public class ViewMovieFragment extends Fragment {
         showDescription = view.findViewById(R.id.show_description);
         ratingBar = view.findViewById(R.id.ratingBar);
         saveRating = view.findViewById(R.id.save_rating_button);
+        rottenTomatoeButton = view.findViewById(R.id.rotten_tomatoe_button);
 
         showTitle.setText(movie.getName());
         showDate.setText("Release Date: " + movie.getDate());
         showGenres.setText("Genres: " + movie.getGenres());
         showDescription.setText("Description: " + movie.getOverview());
 
-        rating = ratingBar.getRating();
-        Log.d(TAG, String.valueOf(rating));
+
+        ratingBar.setRating(movie.getRating());
+
+        rottenTomatoeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.rottentomatoes.com/search/?search=" + movie.getName()));
+                startActivity(browserIntent);
+            }
+        });
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override

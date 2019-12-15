@@ -40,7 +40,6 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         this.data = data;
     }
 
-
     static class CurrentMovieListViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout layout;
@@ -62,12 +61,6 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
             dateTextView = layout.findViewById(R.id.dateTextView);
             descriptionTextView = layout.findViewById(R.id.descriptionTextView);
             favoriteButton = layout.findViewById(R.id.saveFavoriteButton);
-
-
-
-
-
-
         }
     }
 
@@ -113,7 +106,6 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
         });
 
     }
-
     @Override
     public int getItemCount() {
         return data.size();

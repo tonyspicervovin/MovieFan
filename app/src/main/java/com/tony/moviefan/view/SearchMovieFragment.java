@@ -55,11 +55,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
     private HashMap<Integer, String> genres;
 
     private MoviesViewModel moviesViewModel;
-
-
     private static String key = BuildConfig.MOVIE_TOKEN;
-
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -89,7 +85,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
         mMovies = new ArrayList<Movie>();
 
         mRecyclerView = view.findViewById(R.id.show_matching_list);
-        searchString = view.findViewById(R.id.searchString);
+        searchString = view.findViewById(R.id.search_favorite_string);
         searchButton = view.findViewById(R.id.searchMatchingButton);
         //registering widgets
 
@@ -114,11 +110,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
                 getSearchedForMovies(search);
             }
         });
-        //Movie a = new Movie("hellraiser","fun movie", "horror", "11-25-1994");
-        //moviesViewModel.insert(a);
         getGenres();
-
-
         return view;
     }
 
@@ -138,8 +130,6 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
                         Log.d(TAG, mMovies.toString());
                         mAdapter.setMovies(mMovies);
                         mAdapter.notifyDataSetChanged();
-
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -150,6 +140,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
         );
         queue.add(movieRequest);
     }
+    //getting movies that match search string
 
 
 
@@ -186,13 +177,14 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
                     Movies.add(new Movie(title, description, genreCombined, date));
                     genreCombined = "";
                 }catch (JSONException e) {
-                    Log.e(TAG, "Error processing JSON resposne", e);
+                    Log.e(TAG, "Error processing JSON response", e);
                 }
             }
             return Movies;
+            // processing json response and creating a movie
 
         } catch (JSONException e) {
-            Log.e(TAG, "Error processing JSON resposne", e);
+            Log.e(TAG, "Error processing JSON response", e);
         }
         return null;
 

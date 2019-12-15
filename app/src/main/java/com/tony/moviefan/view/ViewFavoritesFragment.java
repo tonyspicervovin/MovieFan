@@ -12,12 +12,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.tony.moviefan.R;
@@ -36,8 +36,12 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
     private CurrentMovieListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Button deleteButton;
+    private Button searchFavorites;
+    private EditText searchString;
 
     private ArrayList<Movie> mMovies;
+    private ArrayList<Movie> matchingMovies;
+    private Integer matchCount = 0;
 
     private MoviesViewModel moviesViewModel;
 
@@ -66,7 +70,9 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
 
         Log.d(TAG, "favorite fragment");
 
-        deleteButton = view.findViewById(R.id.delete_button);
+        deleteButton = view.findViewById(R.id.search_favorites);
+        searchFavorites = view.findViewById(R.id.search_favorites);
+        searchString = view.findViewById(R.id.search_favorite_string);
         mMovies = new ArrayList<Movie>();
 
         mRecyclerView = view.findViewById(R.id.show_favorite_list);
@@ -77,6 +83,30 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
 
         mAdapter = new CurrentMovieListAdapter(mMovies, this, "Delete from Favorites");
         mRecyclerView.setAdapter(mAdapter);
+
+        searchFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String search = searchString.getText().toString();
+                matchingMovies = new ArrayList<Movie>();
+
+                for (int i = 0; i < mMovies.size(); i++) {
+                    String title = mMovies.get(i).getName();
+                    String description = mMovies.get(i).getOverview();
+                    Log.d(TAG, mMovies.get(i).getName() + " " + search);
+                    if (title.contains(search) || description.contains(search)) {
+                        matchCount += 1;
+                        matchingMovies.add(mMovies.get(i));
+                        mAdapter.setMovies(matchingMovies);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                    if (matchCount == 0) {
+                        Toast.makeText(getActivity(), "No matching movies found", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                matchCount = 0;
+            }
+        });
 
         moviesViewModel.getAllMovies().observe(getActivity(), new Observer<List<Movie>>() {
             @Override

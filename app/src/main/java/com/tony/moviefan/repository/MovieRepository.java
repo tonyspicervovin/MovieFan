@@ -39,9 +39,8 @@ public class MovieRepository {
                 .build();
 
         mMovieService = retrofit.create(MovieService.class);
-
         mAllMovies = new MutableLiveData<>();
-
+        //establishing connection to rest api with authorization header
     }
 
     public MutableLiveData<List<Movie>> getAllMovies() {
@@ -57,18 +56,14 @@ public class MovieRepository {
                     Log.e(TAG, "Error getting all movies, message from server: " + response.message());
                 }
             }
-
             @Override
             public void onFailure(Call<List<Movie>> call, Throwable t) {
                 Log.e(TAG, "Error fetching all movies", t);
-
             }
         });
-
         return mAllMovies;
-
+        // calling movie service for retrieve all movies and return to viewmodel
     }
-
 
     public MutableLiveData<Movie> getMovie(final int id) {
 
@@ -87,14 +82,13 @@ public class MovieRepository {
                     movie.setValue(null);
                 }
             }
-
             @Override
             public void onFailure(Call<Movie> call, Throwable t) {
                 Log.e(TAG, "Error getting movie id " + id , t);
             }
         });
-
         return movie;
+        //calling movie service to get move by id, returning to viewmodel
     }
 
     public MutableLiveData<String> insert(final Movie movie) {
@@ -121,7 +115,6 @@ public class MovieRepository {
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 insertResult.setValue("error");
@@ -129,14 +122,12 @@ public class MovieRepository {
 
             }
         });
-
-
         return insertResult;
-
+        //calling movie service to insert movie, returning live data with result to display to user
     }
 
-
-    public void update(final Movie movie) {
+    public MutableLiveData<String> update(final Movie movie) {
+        final MutableLiveData<String> updateResult = new MutableLiveData<>();
 
         mMovieService.update(movie, movie.getId()).enqueue(new Callback<Void>() {
 
@@ -144,22 +135,25 @@ public class MovieRepository {
             @Override
             public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
                 if (response.isSuccessful()) {
+                    updateResult.setValue("Success updating rating");
                     Log.d(TAG, "updating movie " + movie);
                     getAllMovies();
                 }else {
-                    Log.e(TAG, "Errpr updating movie, message from server: " + response.message());
+                    updateResult.setValue("Error updating rating");
+                    Log.e(TAG, "Error updating movie, message from server: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                updateResult.setValue("Error updating rating");
                 Log.e(TAG, "Error updating movie " + movie, t);
 
             }
         });
+        return updateResult;
 
-
-
+        //updating movie
     }
 
 
@@ -180,7 +174,6 @@ public class MovieRepository {
                 }
             }
 
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.e(TAG, "Error deleting movie " + movie, t);
@@ -189,7 +182,6 @@ public class MovieRepository {
             }
         });
         return deleteResult;
-
+        //deleting movie
     }
-
 }
