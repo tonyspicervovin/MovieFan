@@ -231,7 +231,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
 
     @Override
     public void onAddFavorite(int position) {
-        Log.d(TAG, String.valueOf(position));
+        Log.d(TAG, "adding movie");
         Movie movie = mMovies.get(position);
         moviesViewModel.insert(movie).observe(this, new Observer<String>() {
             @Override
@@ -240,7 +240,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
             }
         });
 
-        Log.d(TAG, "Added " + movie.getName());
+
 
     }
 
