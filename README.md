@@ -20,9 +20,9 @@ Icons from
 https://icons8.com/
 
 
- ![screenshot1](screenshots/scrn1.jpg)
- ![screenshot2](screenshots/scrn2.jpg)
- ![screenshot3](screenshots/scrn3.jpg)
+ ![screenshot1](screenshots/scrn1.png)
+ ![screenshot2](screenshots/scrn2.png)
+ ![screenshot3](screenshots/scrn3.png)
 
 
 
