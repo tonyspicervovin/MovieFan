@@ -111,10 +111,21 @@ public class ExampleInstrumentedTest {
 
         onView(withId(R.id.view_favorites_button)).perform(click());
         //click view favorite button
-        onView(withId(R.id.show_favorite_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, longClick()));
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.show_favorite_list)).perform(RecyclerViewActions.actionOnItem(hasDescendant(withText("Title: Hello, Love, Goodbye")), longClick()));
 
-        onView(withId(R.id.show_title_movie))
-                .check(matches(isDisplayed()));
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
     @Test
     public void check_search_movie_displays_movie_in_list() {
@@ -132,7 +143,6 @@ public class ExampleInstrumentedTest {
         //finding the first position in the recyclerview
         onView(withText("Oldboy")).check(matches(isDisplayed()));
         //checking to see that it contains the text Oldboy
-
 
     }
     @Test
