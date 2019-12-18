@@ -106,9 +106,12 @@ public class MovieRepository {
                     String error;
                     try {
                         error = response.errorBody().string();
-                        insertResult.setValue(error);
-                        Log.e(TAG, "Error inserting movie, response from server: " + error + " message " + response.message());
-
+                        if (error.contains("duplicate key value violates unique constraint")) {
+                            insertResult.setValue("failed, duplicate movie");
+                        }else {
+                            insertResult.setValue(error);
+                            Log.e(TAG, "Error inserting movie, response from server: " + error + " message " + response.message());
+                        }
                     }catch (Exception e) {
                         insertResult.setValue("error");
                         Log.e(TAG, "Error inserting movie, message from server: " + response.message());
@@ -119,7 +122,6 @@ public class MovieRepository {
             public void onFailure(Call<Void> call, Throwable t) {
                 insertResult.setValue("error");
                 Log.e(TAG, "Error inserting movie " + movie, t);
-
             }
         });
         return insertResult;

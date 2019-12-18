@@ -59,10 +59,10 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                SearchFragment searchFragment = SearchFragment.newInstance();
+                NewMoviesFragment newMoviesFragment = NewMoviesFragment.newInstance();
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.fragment_container, searchFragment);
+                ft.replace(R.id.fragment_container, newMoviesFragment);
                 ft.addToBackStack(null);
                 ft.commit();
             }

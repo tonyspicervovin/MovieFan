@@ -116,16 +116,14 @@ public class ExampleInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(withId(R.id.show_favorite_list)).perform(RecyclerViewActions.actionOnItem(hasDescendant(withText("Title: Hello, Love, Goodbye")), longClick()));
-
+        onView(withId(R.id.show_favorite_list))
+                .perform(RecyclerViewActions.actionOnItem(
+                        hasDescendant(withText("DELETE")), click()));
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-
     }
     @Test
     public void check_search_movie_displays_movie_in_list() {
