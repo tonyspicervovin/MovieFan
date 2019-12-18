@@ -5,10 +5,12 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.tony.moviefan.BuildConfig;
+import com.tony.moviefan.MovieApi.MovieAPICall;
 import com.tony.moviefan.R;
 import com.tony.moviefan.model.Movie;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,7 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class SearchFragment extends Fragment implements SaveFavoriteListener{
+public class NewMoviesFragment extends Fragment implements SaveFavoriteListener{
 
     private static final String TAG = "SEARCH_FRAGMENT";
 
@@ -60,12 +62,12 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
     private static String key = BuildConfig.MOVIE_TOKEN;
 
 
-    public SearchFragment() {
+    public NewMoviesFragment() {
         // Required empty public constructor
     }
 
-    public static SearchFragment newInstance() {
-        SearchFragment fragment = new SearchFragment();
+    public static NewMoviesFragment newInstance() {
+        NewMoviesFragment fragment = new NewMoviesFragment();
 
         return fragment;
     }
@@ -99,123 +101,30 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
         //setting up adapter
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        getGenres(queue);
-
 
         getMoviesShowingCurrently();
-
-
-
         return view;
     }
 
-    public HashMap<Integer, String> getGenres(RequestQueue queue) {
 
-        Log.d(TAG, "fetching genres");
-        genres = new HashMap<>();
-
-
-        String urlGenres = "https://api.themoviedb.org/3/genre/movie/list?api_key="+key+"&language=en-US";
-
-        JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlGenres, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-                            JSONArray resultArray = response.getJSONArray("genres");
-                            for (int i = 0; i < resultArray.length(); i++) {
-                                JSONObject obj = resultArray.getJSONObject(i);
-                                int id = obj.getInt("id");
-                                String name = obj.getString("name");
-                                Log.d(TAG, "Adding " + name);
-                                genres.put(id, name);
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "Error processing JSON resposne", e);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }
-        );
-        queue.add(movieRequest);
-
-        return genres;
-
-    }
 
     private void getMoviesShowingCurrently() {
 
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String urlMovies = "https://api.themoviedb.org/3/movie/now_playing?api_key="+key+"&language=en-US&page=1";
+        LiveData<List<Movie>> ld = MovieAPICall.getCurrentMovies(this.getContext());
+        ld.observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
 
+                // now have list of movies
+                // add to adapter
 
-        JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlMovies, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        ArrayList <Movie> Movies = processResponse(response);
-                        mMovies = Movies;
-                        Log.d(TAG, mMovies.toString());
-                        mAdapter.setMovies(mMovies);
-                        mAdapter.notifyDataSetChanged();
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }
-        );
-        queue.add(movieRequest);
-    }
-
-    private ArrayList<Movie> processResponse(JSONObject response) {
-
-        ArrayList <Movie> Movies  = new ArrayList<>();
-        try {
-            JSONArray resultArray = response.getJSONArray("results");
-            for (int i = 0; i < resultArray.length(); i++) {
-
-                JSONObject obj = resultArray.getJSONObject(i);
-                String lang = obj.getString("original_language");
-                if (lang.equals("en")){
-                    title = obj.getString("original_title");
-                }else {
-                    title = obj.getString("title");
-                }
-
-                String description = obj.getString("overview");
-                String date = obj.getString("release_date");
-                JSONArray genre_ids = obj.getJSONArray("genre_ids");
-
-                for (int j = 0; j < genre_ids.length(); j++) {
-                    int code = genre_ids.getInt(j);
-                    String genre = convertToGenreString(code);
-                    genreCombined = genreCombined +" " + genre;
-                    Log.d(TAG, "genre " + genre_ids.getInt(j));
-                }
-
-                Log.d(TAG, "Adding movie "+ title);
-                Movies.add(new Movie(title, description, genreCombined, date));
-                genreCombined = "";
-
+                mAdapter.setMovies(movies);
+                mAdapter.notifyDataSetChanged();
 
             }
-            return Movies;
-
-        } catch (JSONException e) {
-            Log.e(TAG, "Error processing JSON resposne", e);
-        }
-        return null;
-
+        });
     }
+        //calling api for movies and observing livedata
 
     private String convertToGenreString(int code) {
 
@@ -239,7 +148,6 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -255,24 +163,16 @@ public class SearchFragment extends Fragment implements SaveFavoriteListener{
                 Toast.makeText(getActivity(), "Insert " + s, Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
-
     @Override
     public void onDeleteFavorite(int position) {
 
     }
-
     @Override
     public void onLongClick(Movie movie) {
 
     }
-
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-
-
-
 }
