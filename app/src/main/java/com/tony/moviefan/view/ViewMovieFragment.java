@@ -41,10 +41,6 @@ public class ViewMovieFragment extends Fragment {
     private ImageButton rottenTomatoeButton;
 
     private MoviesViewModel moviesViewModel;
-
-
-
-
     private OnFragmentInteractionListener mListener;
 
     public ViewMovieFragment(Movie movie) {
@@ -66,11 +62,9 @@ public class ViewMovieFragment extends Fragment {
         moviesViewModel = ViewModelProviders.of(getActivity()).get(MoviesViewModel.class);
         if (getArguments() != null) {
             movie = getArguments().getParcelable("movie");
-
         }
-
     }
-
+    //getting movie object from arguments
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,12 +78,13 @@ public class ViewMovieFragment extends Fragment {
         ratingBar = view.findViewById(R.id.ratingBar);
         saveRating = view.findViewById(R.id.save_rating_button);
         rottenTomatoeButton = view.findViewById(R.id.rotten_tomatoe_button);
+        //widget registering
 
         showTitle.setText(movie.getName());
         showDate.setText("Release Date: " + movie.getDate());
         showGenres.setText("Genres: " + movie.getGenres());
         showDescription.setText("Description: " + movie.getOverview());
-
+        //setting data
 
         ratingBar.setRating(movie.getRating());
 
@@ -100,12 +95,12 @@ public class ViewMovieFragment extends Fragment {
                 startActivity(browserIntent);
             }
         });
+        //launching rotten tomatoes search on click of tomato button
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 rating = ratingBar.getRating();
-
             }
         });
 
@@ -117,6 +112,7 @@ public class ViewMovieFragment extends Fragment {
                 moviesViewModel.update(movie);
             }
         });
+        //when user saves rating it patches the movie with a rating
 
         return view;
     }
@@ -143,7 +139,6 @@ public class ViewMovieFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }

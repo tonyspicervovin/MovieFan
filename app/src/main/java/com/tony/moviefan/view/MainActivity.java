@@ -33,21 +33,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         ft.replace(R.id.fragment_container, mainFragment);
         ft.commit();
         //displaying main fragment initially
-
-
-
-
-
-
-
-
-
-
-
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 }

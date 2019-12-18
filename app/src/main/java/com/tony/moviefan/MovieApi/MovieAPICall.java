@@ -2,8 +2,6 @@ package com.tony.moviefan.MovieApi;
 
 import android.content.Context;
 import android.util.Log;
-
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
@@ -14,8 +12,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.tony.moviefan.BuildConfig;
 import com.tony.moviefan.model.Movie;
-import com.tony.moviefan.view.NewMoviesFragment;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,23 +25,14 @@ import java.util.List;
 
         private static String TAG = "MOVIE_API_CALL";
         private static String key = BuildConfig.MOVIE_TOKEN;
-        private ArrayList<Movie> mMovies;
         private static HashMap<Integer, String> genres;
-
-
-        private JSONObject returnResponse;
 
         public static MutableLiveData<List<Movie>> getSearchedForMovies(Context context, String search) {
 
             final MutableLiveData<List<Movie>> liveDataMovie = new MutableLiveData<>();
-
-
-
             RequestQueue queue = Volley.newRequestQueue(context);
             getGenres(queue);
             String urlMovies = "https://api.themoviedb.org/3/search/movie?api_key="+key+"&language=en-US&page=1&include_adult=false&query="+search;
-
-
             JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlMovies, null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -62,23 +49,17 @@ import java.util.List;
             );
             queue.add(movieRequest);
             return liveDataMovie;
-
+        // making call to api for searched movie, processing response and assigning live data to it which is observed in SearchMovieFragment
         }
 
-
         public static MutableLiveData<List<Movie>> getCurrentMovies(Context context) {
-
-
 
             Log.d(TAG, "Calling api");
 
             final MutableLiveData<List<Movie>> liveDataMovie = new MutableLiveData<>();
-
             RequestQueue queue = Volley.newRequestQueue(context);
             getGenres(queue);
             String urlMovies = "https://api.themoviedb.org/3/movie/now_playing?api_key="+key+"&language=en-US&page=1";
-            //  final SearchFragment searchFragment = new SearchFragment();
-
             JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlMovies, null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -97,11 +78,10 @@ import java.util.List;
                     }
             );
             queue.add(movieRequest);
-
             return liveDataMovie;
-
         }
-
+        // Making call for new movies in theatres, processing response to list of movies and assigning live data to that which is observed
+        // in the NewMoviesFragment
 
         private static List<Movie> processResponse(JSONObject response) {
 
@@ -133,7 +113,7 @@ import java.util.List;
                     Log.d(TAG, "Adding movie "+ title);
                     Movies.add(new Movie(title, description, genreCombined, date));
                     genreCombined = "";
-
+                //processing making a list of movies from the json response
 
                 }
                 return Movies;
@@ -142,25 +122,20 @@ import java.util.List;
                 Log.e(TAG, "Error processing JSON resposne", e);
             }
             return null;
-
         }
-
-
         private static String  convertToGenreString(int code) {
 
             String genreString  = genres.get(code);
 
             return genreString;
         }
+        //converting genre code to a string
 
         public static HashMap<Integer, String> getGenres(RequestQueue queue) {
 
             Log.d(TAG, "fetching genres");
             genres = new HashMap<>();
-
-
             String urlGenres = "https://api.themoviedb.org/3/genre/movie/list?api_key="+key+"&language=en-US";
-
             JsonObjectRequest movieRequest = new JsonObjectRequest(Request.Method.GET, urlGenres, null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -189,8 +164,7 @@ import java.util.List;
             queue.add(movieRequest);
 
             return genres;
-
         }
-
-
+        //retrieving genre codes and corresponding strings from api
+        //putting them in a hash map to be able to convert our code to a string
     }

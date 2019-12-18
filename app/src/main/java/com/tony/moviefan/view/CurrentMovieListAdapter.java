@@ -9,15 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tony.moviefan.R;
 import com.tony.moviefan.model.Movie;
-import com.tony.moviefan.viewmodel.MoviesViewModel;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -104,11 +99,9 @@ public class CurrentMovieListAdapter extends RecyclerView.Adapter<CurrentMovieLi
                 Log.d(TAG, "Saving " + movie.getName());
             }
         });
-
     }
     @Override
     public int getItemCount() {
         return data.size();
     }
-
 }

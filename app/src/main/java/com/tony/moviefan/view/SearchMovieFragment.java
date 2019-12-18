@@ -40,10 +40,8 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
     private EditText searchString;
     private Button searchButton;
     private ArrayList<Movie> mMovies;
-    private HashMap<Integer, String> genres;
 
     private MoviesViewModel moviesViewModel;
-    private static String key = BuildConfig.MOVIE_TOKEN;
 
     private OnFragmentInteractionListener mListener;
 

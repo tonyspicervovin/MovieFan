@@ -145,7 +145,6 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
     public void onAddFavorite(int position) {
 
     }
-
     @Override
     public void onDeleteFavorite(int position) {
         Log.d(TAG, String.valueOf(position));
@@ -161,8 +160,6 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
     @Override
     public void onLongClick(Movie movie) {
 
-        /*Bundle bundle = new Bundle();
-        bundle.putParcelable("movie", (Parcelable) movie);*/
         ViewMovieFragment viewMovieFragment = ViewMovieFragment.newInstance(movie);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -171,7 +168,6 @@ public class ViewFavoritesFragment extends Fragment implements SaveFavoriteListe
         ft.commit();
 
     }
-
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }

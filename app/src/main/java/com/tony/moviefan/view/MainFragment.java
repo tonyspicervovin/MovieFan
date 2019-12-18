@@ -18,20 +18,17 @@ import com.tony.moviefan.R;
 
 public class MainFragment extends Fragment {
 
-
     private ImageButton searchButton;
     private ImageButton newButton;
     private ImageButton viewFavoriteButton;
 
     private OnFragmentInteractionListener mListener;
 
-
     private static String TAG = "MAIN_FRAGMENT";
 
     public MainFragment() {
         // Required empty public constructor
     }
-
 
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
@@ -121,7 +118,6 @@ public class MainFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 
     public interface OnFragmentInteractionListener {
 
