@@ -117,7 +117,7 @@ public class NewMoviesFragment extends Fragment implements SaveFavoriteListener{
 
                 // now have list of movies
                 // add to adapter
-
+                mMovies = movies;
                 mAdapter.setMovies(movies);
                 mAdapter.notifyDataSetChanged();
 
@@ -126,12 +126,6 @@ public class NewMoviesFragment extends Fragment implements SaveFavoriteListener{
     }
         //calling api for movies and observing livedata
 
-    private String convertToGenreString(int code) {
-
-        String genreString  = genres.get(code);
-
-        return genreString;
-    }
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

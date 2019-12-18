@@ -108,6 +108,7 @@ public class SearchMovieFragment extends Fragment implements SaveFavoriteListene
             public void onChanged(List<Movie> movies) {
                 // now have list of movies
                 // add to adapter
+                mMovies = (ArrayList<Movie>) movies;
                 mAdapter.setMovies(movies);
                 mAdapter.notifyDataSetChanged();
             }
